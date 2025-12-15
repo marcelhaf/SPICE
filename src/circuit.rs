@@ -132,11 +132,6 @@ impl Circuit {
         let lines = self.read_file(file_name)?;
         self.build_netlist(lines)?;
 
-        println!(
-            "mode = {}, dt = {}, total_time = {}",
-            self.mode, self.dt, self.total_time
-        );
-
         match self.mode {
             1 => self.run_dc_linear()?,
             2 => self.run_dc_nonlinear()?,
@@ -396,7 +391,6 @@ impl Circuit {
             self.table.push(row);
             t += dt;
         }
-        println!("SPN: table.len() = {}", self.table.len());
         Ok(())
     }
 
@@ -877,7 +871,6 @@ impl Circuit {
             }
             writeln!(f).map_err(|_| "Failed to write output".to_string())?;
         } else if self.mode == 3 || self.mode == 4 {
-            println!("save_table: mode = {}, rows = {}", self.mode, self.table.len());
             // transient SP: iterate over table rows
             let dt = self.dt;
             for (idx, row) in self.table.iter().enumerate() {
@@ -931,4 +924,5 @@ impl Circuit {
         }
         self.sol_nr = aux;
     }
+
 }
